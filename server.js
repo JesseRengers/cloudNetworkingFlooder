@@ -21,6 +21,7 @@ app.post('/flooder',function(req,res) {
             req.body.sink_port,
             req.body.packet_size,
             req.body.duration) //launc flooder function
+        console.log(req.body)
         res.writeHead(200, {'Content-Type': 'text/html'})
         res.end('Now flooding after ' + req.body.offset + ' for ' + req.body.duration + ' seconds')
     } else {
