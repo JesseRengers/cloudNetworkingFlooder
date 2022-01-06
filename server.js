@@ -8,7 +8,7 @@ app.use(bodyParser.json());
 
 //Dummy react on a GET request, just sending some string
 app.get("/", function(req,res) {
-    res.send("This is the flooder")
+    res.send("<h1>Co-residency detection</h1>This is the flooder")
 })
 
 //React on the post request of the client at /flooder, only if key is a specific string
@@ -16,12 +16,13 @@ app.get("/", function(req,res) {
 app.post('/flooder',function(req,res) {
     console.log("Got a post")
     if (req.body.key == 'ditiseensoortwachtwoord') {
+        console.log(req.body)
         instruct_flooder(req.body.offset,
             req.body.sink_ip,
             req.body.sink_port,
             req.body.packet_size,
             req.body.duration) //launc flooder function
-        console.log(req.body)
+        
         res.writeHead(200, {'Content-Type': 'text/html'})
         res.end('Now flooding after ' + req.body.offset + ' for ' + req.body.duration + ' seconds')
     } else {
