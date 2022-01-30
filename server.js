@@ -15,40 +15,28 @@ app.get("/", function(req,res) {
 //runs the flood function
 app.post('/flooder',function(req,res) {
     console.log("Got a post")
-    if (req.body.key == 'ditiseensoortwachtwoord') {
-        console.log(req.body)
-        instruct_flooder(req.body.offset,
+    console.log(req.body)
+    instruct_flooder(req.body.floodDuration,
             req.body.sink_ip,
             req.body.sink_port,
             req.body.packet_size,
-            req.body.duration) //launc flooder function
+            req.body.measureDuration) //launc flooder function
         
-        res.writeHead(200, {'Content-Type': 'text/html'})
-        res.end('Now flooding after ' + req.body.offset + ' for ' + req.body.duration + ' seconds')
-    } else {
-        console.log("Nevermind")
-        res.writeHead(400, {'Content-Type': 'text/html'})
-        res.end()
-    }
+    res.writeHead(200, {'Content-Type': 'text/html'})
+    res.end('Now flooding after ' + req.body.offset + ' for ' + req.body.duration + ' seconds')
 })
 
 
 //Waits <offset> seconds before flooding a host in the options constant
-const instruct_flooder = async function(offset,sink_ip,sink_port,packet_size,duration) {
-    //Waiting
-    console.log("now waiting for " + offset + " seconds")
-    await new Promise(resolve => setTimeout(resolve, offset * 1000));
-    console.log("Now Flodding for " + duration + " seconds")
+const instruct_flooder = async function(floodDuration,sink_ip,sink_port,packet_size,measureDuration) {
 
     const spawn = require("child_process").spawn;
-
-    //Python arguments: packet_bin_ip, packet_bin_port, packet_size, duration
-    const pythonProcess = spawn('python3',["flooder.py", sink_ip, sink_port, packet_size,duration]);
-
+    const pythonProcess = spawn('python3',["flooder.py", sink_ip, sink_port, packet_size,measureDuration,floodDuration])
 
     pythonProcess.stdout.on('data', (data) => {
         console.log(data.toString('hex'))
     });
+
 }
 
 

